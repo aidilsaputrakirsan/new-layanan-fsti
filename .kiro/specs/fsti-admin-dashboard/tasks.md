@@ -1,0 +1,318 @@
+# Implementation Plan: FSTI Admin Dashboard
+
+## Overview
+
+Implementasi Dashboard Layanan Administrasi FSTI menggunakan Laravel 12 + Inertia.js + Vue 3 + Naive UI. Task list ini disusun secara incremental, dimulai dari setup project hingga fitur lengkap.
+
+## Tasks
+
+- [x] 1. Project Setup dan Konfigurasi Dasar
+  - [x] 1.1 Inisialisasi Laravel 12 dengan Inertia + Vue starter kit
+    - Jalankan `composer create-project laravel/laravel fsti-dashboard`
+    - Install Inertia.js dan Vue 3
+    - Konfigurasi Vite untuk Vue
+    - _Requirements: Tech Stack_
+  - [x] 1.2 Setup Naive UI dan Tailwind CSS
+    - Install `naive-ui` dan `@vicons/ionicons5`
+    - Konfigurasi Naive UI provider di app.js
+    - Install dan konfigurasi Tailwind CSS
+    - _Requirements: Tech Stack_
+  - [x] 1.3 Setup Database MySQL dan konfigurasi environment
+    - Konfigurasi `.env` untuk MySQL connection
+    - Test database connection
+    - _Requirements: Tech Stack_
+  - [x] 1.4 Buat base layouts (AdminLayout.vue dan PublicLayout.vue)
+    - AdminLayout dengan sidebar navigation
+    - PublicLayout dengan header sederhana
+    - _Requirements: UI Structure_
+
+- [x] 2. Autentikasi Admin
+  - [x] 2.1 Buat migration untuk users table (jika belum ada)
+    - Pastikan field: id, name, email, password, timestamps
+    - _Requirements: 1.1_
+  - [x] 2.2 Implementasi halaman Login dengan Naive UI
+    - Form dengan NInput untuk email dan password
+    - NButton untuk submit
+    - Error message display
+    - _Requirements: 1.1, 1.2, 1.3_
+  - [x] 2.3 Implementasi AuthController untuk login/logout
+    - Method `showLogin()`, `login()`, `logout()`
+    - Validasi credentials
+    - Session management
+    - _Requirements: 1.2, 1.3, 1.4, 1.5_
+  - [x] 2.4 Setup middleware untuk route protection
+    - Middleware `auth` untuk admin routes
+    - Redirect ke login jika unauthenticated
+    - _Requirements: 1.6_
+  - [ ]* 2.5 Write property test untuk Authentication Flow
+    - **Property 1: Authentication Flow Correctness**
+    - **Validates: Requirements 1.2, 1.3, 1.4**
+  - [ ]* 2.6 Write property test untuk Route Protection
+    - **Property 2: Route Protection**
+    - **Validates: Requirements 1.6**
+
+- [x] 3. Manajemen Kategori Layanan
+  - [x] 3.1 Buat migration dan model Category
+    - Fields: id, name, description, type (enum), icon, order, is_active, timestamps
+    - Unique constraint pada (name, type)
+    - _Requirements: 2.1, 2.5_
+  - [x] 3.2 Buat CategoryController dengan CRUD operations
+    - Methods: index, create, store, edit, update, destroy
+    - Validasi uniqueness name per type
+    - _Requirements: 2.2, 2.3, 2.4_
+  - [x] 3.3 Implementasi halaman Categories/Index.vue
+    - NDataTable untuk list categories
+    - Filter by type (mahasiswa/dosen)
+    - Show form count per category
+    - _Requirements: 2.1, 2.6_
+  - [x] 3.4 Implementasi modal Create/Edit Category
+    - NForm dengan fields: name, description, type, icon
+    - NSelect untuk type
+    - _Requirements: 2.2, 2.3_
+  - [ ]* 3.5 Write property test untuk Category CRUD
+    - **Property 3: Category CRUD Integrity**
+    - **Validates: Requirements 2.2, 2.3, 2.4**
+  - [ ]* 3.6 Write property test untuk Category Name Uniqueness
+    - **Property 4: Category Name Uniqueness**
+    - **Validates: Requirements 2.5**
+
+- [x] 4. Checkpoint - Verifikasi Autentikasi dan Kategori
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 5. Form Builder - Backend
+  - [x] 5.1 Buat migration dan model Form
+    - Fields: id, category_id, title, slug, description, schema (JSON), is_active, timestamps
+    - Foreign key ke categories
+    - Unique constraint pada slug
+    - _Requirements: 3.5, 3.6_
+  - [x] 5.2 Buat FormController untuk admin
+    - Methods: index, create, store, edit, update, destroy, toggleStatus
+    - Auto-generate slug dari title
+    - Store schema sebagai JSON
+    - _Requirements: 3.5, 3.6, 3.7_
+  - [x] 5.3 Buat FormBuilderService
+    - Method untuk validate schema structure
+    - Method untuk generate unique slug
+    - _Requirements: 3.5, 3.6_
+  - [ ]* 5.4 Write property test untuk Form Schema Round-Trip
+    - **Property 5: Form Schema Round-Trip**
+    - **Validates: Requirements 3.5**
+  - [ ]* 5.5 Write property test untuk Form Slug Uniqueness
+    - **Property 6: Form Slug Uniqueness**
+    - **Validates: Requirements 3.6**
+
+- [x] 6. Form Builder - Frontend
+  - [x] 6.1 Buat komponen FormBuilder/FieldPalette.vue
+    - List semua field types yang tersedia
+    - Draggable items
+    - _Requirements: 3.1, 3.2_
+  - [x] 6.2 Buat komponen FormBuilder/FieldEditor.vue
+    - Edit field properties: label, placeholder, required, validation
+    - Conditional logic configuration
+    - Options editor untuk select/radio
+    - _Requirements: 3.3, 3.4, 3.8_
+  - [x] 6.3 Buat komponen FormBuilder/FormCanvas.vue
+    - Drop zone untuk fields
+    - Reorder fields dengan drag
+    - Preview mode
+    - _Requirements: 3.1_
+  - [x] 6.4 Buat halaman Forms/Create.vue dan Forms/Edit.vue
+    - Integrate FormBuilder components
+    - Save form schema
+    - _Requirements: 3.1, 3.5_
+  - [x] 6.5 Buat halaman Forms/Index.vue
+    - NDataTable untuk list forms
+    - Filter by category
+    - Toggle status button
+    - _Requirements: 3.7_
+  - [ ]* 6.6 Write property test untuk Field Type Support
+    - **Property 7: Field Type Support**
+    - **Validates: Requirements 3.2, 4.1**
+
+- [x] 7. Checkpoint - Verifikasi Form Builder
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 8. Public Form - Submission
+  - [x] 8.1 Buat migration dan model Submission
+    - Fields: id, form_id, tracking_number, email, data (JSON), status (enum), admin_notes, timestamps
+    - Index pada tracking_number, status, email
+    - _Requirements: 4.4, 5.4_
+  - [x] 8.2 Buat migration dan model SubmissionFile
+    - Fields: id, submission_id, field_id, filename, original_name, path, mime_type, size, created_at
+    - _Requirements: 9.1_
+  - [x] 8.3 Buat PublicFormController
+    - Method show() untuk display form
+    - Method submit() untuk process submission
+    - Generate unique tracking number
+    - _Requirements: 4.1, 4.4, 4.6_
+  - [x] 8.4 Buat SubmissionService
+    - Method untuk generate tracking number
+    - Method untuk validate submission data
+    - Method untuk handle file uploads
+    - _Requirements: 4.4, 4.7, 9.1_
+  - [x] 8.5 Buat komponen FormRenderer/FormRenderer.vue
+    - Render form dari schema
+    - Handle semua field types
+    - Client-side validation
+    - _Requirements: 4.1, 4.2_
+  - [x] 8.6 Buat komponen FormRenderer/FieldRenderer.vue
+    - Render individual field berdasarkan type
+    - Support conditional visibility
+    - _Requirements: 3.8, 4.1_
+  - [x] 8.7 Buat halaman Public/FormView.vue
+    - Display form untuk diisi
+    - Show success message dengan tracking number
+    - Handle inactive form
+    - _Requirements: 4.1, 4.4, 4.6_
+  - [ ]* 8.8 Write property test untuk Form Validation
+    - **Property 8: Form Validation Completeness**
+    - **Validates: Requirements 4.2, 4.3**
+  - [ ]* 8.9 Write property test untuk Tracking Number Uniqueness
+    - **Property 9: Submission Tracking Number Uniqueness**
+    - **Validates: Requirements 4.4**
+  - [ ]* 8.10 Write property test untuk Inactive Form Rejection
+    - **Property 10: Inactive Form Rejection**
+    - **Validates: Requirements 4.6**
+  - [ ]* 8.11 Write property test untuk File Validation
+    - **Property 11: File Validation Rules**
+    - **Validates: Requirements 4.7, 9.2, 9.3**
+
+- [ ] 9. Checkpoint - Verifikasi Public Form
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 10. Manajemen Submission - Admin
+  - [ ] 10.1 Buat migration dan model SubmissionHistory
+    - Fields: id, submission_id, status, notes, changed_by, created_at
+    - _Requirements: 5.3_
+  - [ ] 10.2 Buat AdminSubmissionController
+    - Methods: index, show, updateStatus, export
+    - Filter by form, status, date range
+    - Pagination
+    - _Requirements: 5.1, 5.2, 5.3, 5.7_
+  - [ ] 10.3 Buat halaman Submissions/Index.vue
+    - NDataTable dengan pagination
+    - NSelect untuk filter form dan status
+    - NDatePicker untuk date range
+    - Export button
+    - _Requirements: 5.1, 5.7_
+  - [ ] 10.4 Buat halaman Submissions/Show.vue
+    - Display semua submitted data
+    - Display attached files dengan preview/download
+    - Status update form dengan notes
+    - Status history timeline
+    - _Requirements: 5.2, 5.3, 5.5_
+  - [ ]* 10.5 Write property test untuk Submission Status Transitions
+    - **Property 12: Submission Status Transitions**
+    - **Validates: Requirements 5.3, 5.4**
+  - [ ]* 10.6 Write property test untuk Submission Filtering
+    - **Property 13: Submission Filtering**
+    - **Validates: Requirements 5.1**
+
+- [ ] 11. Tracking System
+  - [ ] 11.1 Buat PublicTrackingController
+    - Method show() untuk lookup by tracking number
+    - Return submission dengan history
+    - _Requirements: 6.1, 6.2_
+  - [ ] 11.2 Buat halaman Public/Tracking.vue
+    - Input tracking number
+    - Display status dan timeline
+    - Display revision notes jika ada
+    - Download link untuk completed submission
+    - _Requirements: 6.1, 6.2, 6.3, 6.5_
+  - [ ]* 11.3 Write property test untuk Tracking Lookup
+    - **Property 14: Tracking Lookup Correctness**
+    - **Validates: Requirements 6.1, 6.2**
+
+- [ ] 12. Checkpoint - Verifikasi Submission dan Tracking
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 13. Dashboard Analytics
+  - [ ] 13.1 Buat DashboardController
+    - Method index() dengan summary statistics
+    - Method getStats() untuk filtered data
+    - _Requirements: 7.1, 7.5_
+  - [ ] 13.2 Buat DashboardService
+    - Method untuk calculate statistics
+    - Method untuk generate chart data
+    - Method untuk calculate average processing time
+    - _Requirements: 7.1, 7.2, 7.3, 7.4_
+  - [ ] 13.3 Buat halaman Admin/Dashboard.vue
+    - NStatistic cards untuk summary
+    - NChart untuk trends (30 hari)
+    - Breakdown by category dan form
+    - Date range picker
+    - _Requirements: 7.1, 7.2, 7.3, 7.5_
+  - [ ]* 13.4 Write property test untuk Statistics Accuracy
+    - **Property 15: Statistics Accuracy**
+    - **Validates: Requirements 7.1, 7.2, 7.3, 7.5**
+
+- [ ] 14. Email Notifications
+  - [ ] 14.1 Buat NotificationService
+    - Method untuk send submission confirmation
+    - Method untuk send status update
+    - Retry logic (max 3 attempts)
+    - _Requirements: 8.1, 8.2, 8.5_
+  - [ ] 14.2 Buat Mail classes
+    - SubmissionConfirmationMail
+    - StatusUpdateMail
+    - Configurable templates
+    - _Requirements: 8.1, 8.2, 8.3_
+  - [ ] 14.3 Integrate notifications ke submission flow
+    - Trigger email on submission create
+    - Trigger email on status change
+    - _Requirements: 8.1, 8.2_
+  - [ ]* 14.4 Write property test untuk Email Retry Logic
+    - **Property 18: Email Retry Logic**
+    - **Validates: Requirements 8.5**
+
+- [ ] 15. File Management
+  - [ ] 15.1 Buat FileService
+    - Method untuk upload dengan unique filename
+    - Method untuk validate file type dan size
+    - Method untuk delete files
+    - _Requirements: 9.1, 9.2, 9.3_
+  - [ ] 15.2 Buat FileController untuk admin
+    - Method download() dengan authorization check
+    - Method preview() untuk supported formats
+    - _Requirements: 9.4, 9.5_
+  - [ ] 15.3 Implement cascade delete untuk submission files
+    - Observer atau model event untuk delete files on submission delete
+    - _Requirements: 9.6_
+  - [ ]* 15.4 Write property test untuk File Cascade Delete
+    - **Property 16: File Cascade Delete**
+    - **Validates: Requirements 9.6**
+  - [ ]* 15.5 Write property test untuk File Authorization
+    - **Property 17: File Authorization**
+    - **Validates: Requirements 9.4**
+
+- [ ] 16. System Settings
+  - [ ] 16.1 Buat migration dan model Setting
+    - Fields: id, key, value, timestamps
+    - Unique constraint pada key
+    - _Requirements: 10.1_
+  - [ ] 16.2 Buat SettingController
+    - Methods: index, update
+    - _Requirements: 10.1, 10.2, 10.3, 10.4_
+  - [ ] 16.3 Buat SettingService
+    - Method get() dan set() dengan caching
+    - Apply settings immediately
+    - _Requirements: 10.5_
+  - [ ] 16.4 Buat halaman Settings/Index.vue
+    - Tabs untuk different setting groups
+    - Application settings (name, logo, contact)
+    - Email SMTP settings
+    - File upload limits
+    - _Requirements: 10.1, 10.2, 10.3, 10.4_
+
+- [ ] 17. Final Checkpoint
+  - Ensure all tests pass, ask the user if questions arise.
+  - Review semua fitur berfungsi dengan baik
+  - Verify responsive design
+
+## Notes
+
+- Tasks marked with `*` are optional and can be skipped for faster MVP
+- Each task references specific requirements for traceability
+- Checkpoints ensure incremental validation
+- Property tests validate universal correctness properties
+- Unit tests validate specific examples and edge cases
