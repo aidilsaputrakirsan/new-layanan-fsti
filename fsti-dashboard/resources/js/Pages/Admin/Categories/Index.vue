@@ -26,8 +26,14 @@ defineOptions({
 })
 
 const props = defineProps({
-    categories: Object,
-    filters: Object
+    categories: {
+        type: Object,
+        default: () => ({ data: [], current_page: 1, last_page: 1 })
+    },
+    filters: {
+        type: Object,
+        default: () => ({})
+    }
 })
 
 const message = useMessage()

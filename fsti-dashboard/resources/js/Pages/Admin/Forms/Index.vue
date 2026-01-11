@@ -1,5 +1,5 @@
 <script setup>
-import { ref, h } from 'vue'
+import { ref, h, computed } from 'vue'
 import { Head, Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import {
@@ -27,9 +27,18 @@ defineOptions({
 })
 
 const props = defineProps({
-    forms: Object,
-    categories: Array,
-    filters: Object
+    forms: {
+        type: Object,
+        default: () => ({ data: [], current_page: 1, last_page: 1 })
+    },
+    categories: {
+        type: Array,
+        default: () => []
+    },
+    filters: {
+        type: Object,
+        default: () => ({})
+    }
 })
 
 const message = useMessage()
@@ -38,13 +47,13 @@ const search = ref(props.filters?.search || '')
 const categoryFilter = ref(props.filters?.category_id ? Number(props.filters.category_id) : null)
 const statusFilter = ref(props.filters?.status || null)
 
-const categoryOptions = [
+const categoryOptions = computed(() => [
     { label: 'Semua Kategori', value: null },
-    ...props.categories.map(cat => ({
+    ...(props.categories || []).map(cat => ({
         label: `${cat.name} (${cat.type === 'mahasiswa' ? 'Mahasiswa' : 'Dosen'})`,
         value: cat.id
     }))
-]
+])
 
 const statusOptions = [
     { label: 'Semua Status', value: null },

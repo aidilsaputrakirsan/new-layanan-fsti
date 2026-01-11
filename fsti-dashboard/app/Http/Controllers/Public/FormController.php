@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Form;
 use App\Models\Submission;
 use App\Services\SubmissionService;
@@ -17,6 +18,29 @@ class FormController extends Controller
     public function __construct(SubmissionService $submissionService)
     {
         $this->submissionService = $submissionService;
+    }
+
+    /**
+     * Display list of forms by type (mahasiswa/dosen).
+     */
+    public function index(string $type): Response
+    {
+        if (!in_array($type, ['mahasiswa', 'dosen'])) {
+            abort(404, 'Tipe layanan tidak ditemukan.');
+        }
+
+        $categories = Category::where('type', $type)
+            ->where('is_active', true)
+            ->with(['forms' => function ($query) {
+                $query->where('is_active', true)->orderBy('title');
+            }])
+            ->ordered()
+            ->get();
+
+        return Inertia::render('Public/Layanan', [
+            'type' => $type,
+            'categories' => $categories,
+        ]);
     }
 
     /**

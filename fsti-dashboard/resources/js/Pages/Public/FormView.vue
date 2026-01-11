@@ -49,7 +49,7 @@ function handleSubmit({ data, files }) {
         }
     })
     
-    router.post(`/form/${props.form.slug}/submit`, formData, {
+    router.post(`/form/${props.form.id}/submit`, formData, {
         forceFormData: true,
         onFinish: () => {
             loading.value = false

@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from '@inertiajs/vue3'
 import PublicLayout from '@/Layouts/PublicLayout.vue'
 import { NCard, NGrid, NGi, NText, NIcon, NButton } from 'naive-ui'
 import { SchoolOutline, PersonOutline } from '@vicons/ionicons5'
@@ -30,9 +31,11 @@ defineProps({
                                 Akses berbagai layanan administrasi untuk mahasiswa
                             </NText>
                             <div class="mt-6">
-                                <NButton type="primary" size="large">
-                                    Lihat Layanan
-                                </NButton>
+                                <Link href="/layanan/mahasiswa">
+                                    <NButton type="primary" size="large">
+                                        Lihat Layanan
+                                    </NButton>
+                                </Link>
                             </div>
                         </div>
                     </NCard>
@@ -49,9 +52,11 @@ defineProps({
                                 Akses berbagai layanan administrasi untuk dosen
                             </NText>
                             <div class="mt-6">
-                                <NButton type="success" size="large">
-                                    Lihat Layanan
-                                </NButton>
+                                <Link href="/layanan/dosen">
+                                    <NButton type="success" size="large">
+                                        Lihat Layanan
+                                    </NButton>
+                                </Link>
                             </div>
                         </div>
                     </NCard>

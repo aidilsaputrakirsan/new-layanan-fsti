@@ -177,25 +177,25 @@ Implementasi Dashboard Layanan Administrasi FSTI menggunakan Laravel 12 + Inerti
     - **Property 11: File Validation Rules**
     - **Validates: Requirements 4.7, 9.2, 9.3**
 
-- [ ] 9. Checkpoint - Verifikasi Public Form
+- [x] 9. Checkpoint - Verifikasi Public Form
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 10. Manajemen Submission - Admin
-  - [ ] 10.1 Buat migration dan model SubmissionHistory
+- [x] 10. Manajemen Submission - Admin
+  - [x] 10.1 Buat migration dan model SubmissionHistory
     - Fields: id, submission_id, status, notes, changed_by, created_at
     - _Requirements: 5.3_
-  - [ ] 10.2 Buat AdminSubmissionController
+  - [x] 10.2 Buat AdminSubmissionController
     - Methods: index, show, updateStatus, export
     - Filter by form, status, date range
     - Pagination
     - _Requirements: 5.1, 5.2, 5.3, 5.7_
-  - [ ] 10.3 Buat halaman Submissions/Index.vue
+  - [x] 10.3 Buat halaman Submissions/Index.vue
     - NDataTable dengan pagination
     - NSelect untuk filter form dan status
     - NDatePicker untuk date range
     - Export button
     - _Requirements: 5.1, 5.7_
-  - [ ] 10.4 Buat halaman Submissions/Show.vue
+  - [x] 10.4 Buat halaman Submissions/Show.vue
     - Display semua submitted data
     - Display attached files dengan preview/download
     - Status update form dengan notes
@@ -208,12 +208,12 @@ Implementasi Dashboard Layanan Administrasi FSTI menggunakan Laravel 12 + Inerti
     - **Property 13: Submission Filtering**
     - **Validates: Requirements 5.1**
 
-- [ ] 11. Tracking System
-  - [ ] 11.1 Buat PublicTrackingController
+- [x] 11. Tracking System
+  - [x] 11.1 Buat PublicTrackingController
     - Method show() untuk lookup by tracking number
     - Return submission dengan history
     - _Requirements: 6.1, 6.2_
-  - [ ] 11.2 Buat halaman Public/Tracking.vue
+  - [x] 11.2 Buat halaman Public/Tracking.vue
     - Input tracking number
     - Display status dan timeline
     - Display revision notes jika ada
@@ -223,20 +223,20 @@ Implementasi Dashboard Layanan Administrasi FSTI menggunakan Laravel 12 + Inerti
     - **Property 14: Tracking Lookup Correctness**
     - **Validates: Requirements 6.1, 6.2**
 
-- [ ] 12. Checkpoint - Verifikasi Submission dan Tracking
+- [x] 12. Checkpoint - Verifikasi Submission dan Tracking
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 13. Dashboard Analytics
-  - [ ] 13.1 Buat DashboardController
+- [x] 13. Dashboard Analytics
+  - [x] 13.1 Buat DashboardController
     - Method index() dengan summary statistics
     - Method getStats() untuk filtered data
     - _Requirements: 7.1, 7.5_
-  - [ ] 13.2 Buat DashboardService
+  - [x] 13.2 Buat DashboardService
     - Method untuk calculate statistics
     - Method untuk generate chart data
     - Method untuk calculate average processing time
     - _Requirements: 7.1, 7.2, 7.3, 7.4_
-  - [ ] 13.3 Buat halaman Admin/Dashboard.vue
+  - [x] 13.3 Buat halaman Admin/Dashboard.vue
     - NStatistic cards untuk summary
     - NChart untuk trends (30 hari)
     - Breakdown by category dan form
