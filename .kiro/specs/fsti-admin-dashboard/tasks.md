@@ -246,18 +246,18 @@ Implementasi Dashboard Layanan Administrasi FSTI menggunakan Laravel 12 + Inerti
     - **Property 15: Statistics Accuracy**
     - **Validates: Requirements 7.1, 7.2, 7.3, 7.5**
 
-- [ ] 14. Email Notifications
-  - [ ] 14.1 Buat NotificationService
+- [x] 14. Email Notifications
+  - [x] 14.1 Buat NotificationService
     - Method untuk send submission confirmation
     - Method untuk send status update
     - Retry logic (max 3 attempts)
     - _Requirements: 8.1, 8.2, 8.5_
-  - [ ] 14.2 Buat Mail classes
+  - [x] 14.2 Buat Mail classes
     - SubmissionConfirmationMail
     - StatusUpdateMail
     - Configurable templates
     - _Requirements: 8.1, 8.2, 8.3_
-  - [ ] 14.3 Integrate notifications ke submission flow
+  - [x] 14.3 Integrate notifications ke submission flow
     - Trigger email on submission create
     - Trigger email on status change
     - _Requirements: 8.1, 8.2_
@@ -265,17 +265,17 @@ Implementasi Dashboard Layanan Administrasi FSTI menggunakan Laravel 12 + Inerti
     - **Property 18: Email Retry Logic**
     - **Validates: Requirements 8.5**
 
-- [ ] 15. File Management
-  - [ ] 15.1 Buat FileService
+- [x] 15. File Management
+  - [x] 15.1 Buat FileService
     - Method untuk upload dengan unique filename
     - Method untuk validate file type dan size
     - Method untuk delete files
     - _Requirements: 9.1, 9.2, 9.3_
-  - [ ] 15.2 Buat FileController untuk admin
+  - [x] 15.2 Buat FileController untuk admin
     - Method download() dengan authorization check
     - Method preview() untuk supported formats
     - _Requirements: 9.4, 9.5_
-  - [ ] 15.3 Implement cascade delete untuk submission files
+  - [x] 15.3 Implement cascade delete untuk submission files
     - Observer atau model event untuk delete files on submission delete
     - _Requirements: 9.6_
   - [ ]* 15.4 Write property test untuk File Cascade Delete
@@ -285,26 +285,26 @@ Implementasi Dashboard Layanan Administrasi FSTI menggunakan Laravel 12 + Inerti
     - **Property 17: File Authorization**
     - **Validates: Requirements 9.4**
 
-- [ ] 16. System Settings
-  - [ ] 16.1 Buat migration dan model Setting
+- [x] 16. System Settings
+  - [x] 16.1 Buat migration dan model Setting
     - Fields: id, key, value, timestamps
     - Unique constraint pada key
     - _Requirements: 10.1_
-  - [ ] 16.2 Buat SettingController
+  - [x] 16.2 Buat SettingController
     - Methods: index, update
     - _Requirements: 10.1, 10.2, 10.3, 10.4_
-  - [ ] 16.3 Buat SettingService
+  - [x] 16.3 Buat SettingService
     - Method get() dan set() dengan caching
     - Apply settings immediately
     - _Requirements: 10.5_
-  - [ ] 16.4 Buat halaman Settings/Index.vue
+  - [x] 16.4 Buat halaman Settings/Index.vue
     - Tabs untuk different setting groups
     - Application settings (name, logo, contact)
     - Email SMTP settings
     - File upload limits
     - _Requirements: 10.1, 10.2, 10.3, 10.4_
 
-- [ ] 17. Final Checkpoint
+- [x] 17. Final Checkpoint
   - Ensure all tests pass, ask the user if questions arise.
   - Review semua fitur berfungsi dengan baik
   - Verify responsive design

@@ -41,6 +41,15 @@ class Submission extends Model
                 $submission->tracking_number = static::generateTrackingNumber();
             }
         });
+
+        // Cascade delete files from storage when submission is deleted
+        static::deleting(function ($submission) {
+            // Delete all associated files from storage
+            foreach ($submission->files as $file) {
+                $file->deleteFile();
+            }
+            // The database records will be deleted by foreign key cascade
+        });
     }
 
     /**

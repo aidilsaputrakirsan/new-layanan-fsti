@@ -6,12 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\Form;
 use App\Models\Submission;
 use App\Models\SubmissionHistory;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class SubmissionController extends Controller
 {
+    protected NotificationService $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+
     /**
      * Display a listing of the submissions.
      */
@@ -100,6 +108,15 @@ class SubmissionController extends Controller
             'changed_by' => auth()->id(),
             'created_at' => now(),
         ]);
+
+        // Send status update email if status changed
+        if ($oldStatus !== $validated['status']) {
+            $this->notificationService->sendStatusUpdate(
+                $submission,
+                $oldStatus,
+                $validated['notes']
+            );
+        }
 
         return back()->with('success', 'Status pengajuan berhasil diperbarui.');
     }

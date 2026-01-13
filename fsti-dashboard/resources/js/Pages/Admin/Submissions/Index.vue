@@ -44,7 +44,7 @@ const message = useMessage()
 const search = ref(props.filters?.search || '')
 const formFilter = ref(props.filters?.form_id ? Number(props.filters.form_id) : null)
 const statusFilter = ref(props.filters?.status || null)
-const dateRange = ref([props.filters?.date_from, props.filters?.date_to].filter(Boolean))
+const dateRange = ref(null)
 
 const formOptions = computed(() => [
     { label: 'Semua Form', value: null },
@@ -148,9 +148,13 @@ function handleSearch() {
         status: statusFilter.value || undefined,
     }
     
-    if (dateRange.value?.length === 2) {
-        params.date_from = dateRange.value[0]
-        params.date_to = dateRange.value[1]
+    if (dateRange.value && dateRange.value.length === 2) {
+        const formatDate = (ts) => {
+            const d = new Date(ts)
+            return d.toISOString().split('T')[0]
+        }
+        params.date_from = formatDate(dateRange.value[0])
+        params.date_to = formatDate(dateRange.value[1])
     }
     
     router.get('/admin/submissions', params, {
@@ -167,8 +171,14 @@ function handleExport() {
     const params = new URLSearchParams()
     if (formFilter.value) params.append('form_id', formFilter.value)
     if (statusFilter.value) params.append('status', statusFilter.value)
-    if (dateRange.value?.[0]) params.append('date_from', dateRange.value[0])
-    if (dateRange.value?.[1]) params.append('date_to', dateRange.value[1])
+    if (dateRange.value && dateRange.value.length === 2) {
+        const formatDate = (ts) => {
+            const d = new Date(ts)
+            return d.toISOString().split('T')[0]
+        }
+        params.append('date_from', formatDate(dateRange.value[0]))
+        params.append('date_to', formatDate(dateRange.value[1]))
+    }
     
     window.location.href = `/admin/submissions/export?${params.toString()}`
 }

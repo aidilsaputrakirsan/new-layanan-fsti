@@ -3,7 +3,9 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\FormController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SubmissionController;
 use App\Http\Controllers\Public\FormController as PublicFormController;
 use App\Http\Controllers\Public\TrackingController;
@@ -56,5 +58,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/submissions/{submission}', [SubmissionController::class, 'show'])->name('submissions.show');
         Route::patch('/submissions/{submission}/status', [SubmissionController::class, 'updateStatus'])
             ->name('submissions.update-status');
+        
+        // Files
+        Route::get('/files/{file}/download', [FileController::class, 'download'])->name('files.download');
+        Route::get('/files/{file}/preview', [FileController::class, 'preview'])->name('files.preview');
+        Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.destroy');
+        
+        // Settings
+        Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings/application', [SettingController::class, 'updateApplication'])->name('settings.application');
+        Route::post('/settings/email', [SettingController::class, 'updateEmail'])->name('settings.email');
+        Route::post('/settings/file-upload', [SettingController::class, 'updateFileUpload'])->name('settings.file-upload');
     });
 });

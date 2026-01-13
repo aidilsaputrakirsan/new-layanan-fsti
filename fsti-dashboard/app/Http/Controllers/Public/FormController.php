@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Form;
 use App\Models\Submission;
+use App\Services\NotificationService;
 use App\Services\SubmissionService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,10 +15,14 @@ use Inertia\Response;
 class FormController extends Controller
 {
     protected SubmissionService $submissionService;
+    protected NotificationService $notificationService;
 
-    public function __construct(SubmissionService $submissionService)
-    {
+    public function __construct(
+        SubmissionService $submissionService,
+        NotificationService $notificationService
+    ) {
         $this->submissionService = $submissionService;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -98,6 +103,9 @@ class FormController extends Controller
         foreach ($files as $file) {
             $submission->files()->create($file);
         }
+
+        // Send confirmation email
+        $this->notificationService->sendSubmissionConfirmation($submission);
 
         return Inertia::render('Public/FormSuccess', [
             'trackingNumber' => $submission->tracking_number,
